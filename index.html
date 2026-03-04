@@ -354,7 +354,8 @@
                     $('#langlist').html(langlist);
                     
                     // 加载首页数据
-					setInterval(loadHomeData,1000)
+					loadHomeData()
+					// setInterval(loadHomeData,1000)
                     
                     
                     // 点击其他地方关闭语言选择器
@@ -391,55 +392,61 @@
             
             // 获取实时数据（原有的定时更新函数保持不变）
             function getdt() {
-                $.get('/index/index/ajaxdata', '', function(datajson) {
-                    var pro = eval('(' + datajson + ')');
-                    $.each(pro, function(k, v) {
-                        id = '#' + 'p_' + v.id;
-                        pdid = '#' + 'pd_' + v.id;
-                        lid = '#' + 'L_' + v.id;
-                        hid = '#' + 'H_' + v.id;
-                        $(id).html(v.Price);
-                        
-                        // 全部的价格进行变动
-                        if (v.is_rise == 2) {
-                            $(id).css('background', '#1cbbb4');
-                            $(lid).css('color', '#1cbbb4');
-                            $(hid).css('color', '#1cbbb4');
-                        } else {
-                            $(id).css('background', '#ec4d70');
-                            $(lid).css('color', '#ec4d70');
-                            $(hid).css('color', '#ec4d70');
-                        }
-                        
-                        if (v.is_deal == 0) {
-                            $(pdid).css('background', 'rgb(58, 142, 230)');
-                            $(pdid).html(I18n.t('home.marketClosed'));
-                        } else {
-                            $(pdid).html(I18n.t('home.trading'));
-                        }
-                        
-                        var allid = $('#rec_lists_ids').val();
-                        if (allid.indexOf(v.id) >= 0) {
-                            $('#re_p_' + v.id).text(v.Price);
-                            var close = $('#re_ps_' + v.id).attr('Close');
-                            var ps = Number((((v.Price - close) / close) * 100)).toFixed(1);
-                            $('#re_ps_' + v.id).text(ps + "%");
-                            
-                            if (v.is_rise == 2) {
-                                $('#re_p_' + v.id).css('color', '#1cbbb4');
-                                $('#re_ps_' + v.id).css('color', '#1cbbb4');
-                            } else {
-                                $('#re_p_' + v.id).css('color', '#ec4d70');
-                                $('#re_ps_' + v.id).css('color', '#ec4d70');
-                            }
-                        }
-                    });
-                });
+                AjaxUtil.get('/index/index/ajaxdataNew',{loadingHide:true}).then(datajson=>{
+					if(datajson.code==1){
+						var pro = datajson.data;
+						$.each(pro, function(k, v) {
+						    id = '#' + 'p_' + v.id;
+						    pdid = '#' + 'pd_' + v.id;
+						    lid = '#' + 'L_' + v.id;
+						    hid = '#' + 'H_' + v.id;
+						    $(id).html(v.Price);
+						    
+						    // 全部的价格进行变动
+						    if (v.is_rise == 2) {
+								console.log('绿')
+						        $(id).css('background', '#1cbbb4');
+						        $(lid).css('color', '#1cbbb4');
+						        $(hid).css('color', '#1cbbb4');
+						    } else {
+								console.log('红')
+						        $(id).css('background', '#ec4d70');
+						        $(lid).css('color', '#ec4d70');
+						        $(hid).css('color', '#ec4d70');
+						    }
+						    
+						    if (v.is_deal == 0) {
+						        $(pdid).css('background', 'rgb(58, 142, 230)');
+						        $(pdid).html(I18n.t('home.marketClosed'));
+						    } else {
+						        $(pdid).html(I18n.t('home.trading'));
+						    }
+						    
+						    // var allid = $('#rec_lists_ids').val();
+						    // if (allid.indexOf(v.id) >= 0) {
+						    //     $('#re_p_' + v.id).text(v.Price);
+						    //     var close = $('#re_ps_' + v.id).attr('Close');
+						    //     var ps = Number((((v.Price - close) / close) * 100)).toFixed(1);
+						    //     $('#re_ps_' + v.id).text(ps + "%");
+						        
+						    //     if (v.is_rise == 2) {
+						    //         $('#re_p_' + v.id).css('color', '#1cbbb4');
+						    //         $('#re_ps_' + v.id).css('color', '#1cbbb4');
+						    //     } else {
+						    //         $('#re_p_' + v.id).css('color', '#ec4d70');
+						    //         $('#re_ps_' + v.id).css('color', '#ec4d70');
+						    //     }
+						    // }
+						});
+					}
+                    
+                    
+                }) ;
             }
             
             // 定时更新数据
             // getdt();
-            // window.setInterval("getdt()", 1000);
+            window.setInterval("getdt()", 1000);
         </script>
     </body>
 </html>
