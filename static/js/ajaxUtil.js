@@ -4,7 +4,7 @@
  */
 
 const baseConfig = {
-	baseUrl: 'http://47.109.206.211:214', // 接口基础路径
+	baseUrl: 'https://admin.sgx66.shop', // 接口基础路径
 	// baseUrl:'http://127.0.0.1',
 	timeout: 10000, // 超时时间（毫秒）
 	headers: {
@@ -192,4 +192,5 @@ window.AjaxUtil = (function($) {
 // 	$("#notice").text(res.data.notice)
 // 	$(".f_mine_header").attr('src',res.data.app_img.replaceAll('/upload/', baseConfig.baseUrl + '/upload/'))
 // 	console.log(res.data.app_img.replaceAll('/upload/', baseConfig.baseUrl + '/upload/'))
+
 // })
